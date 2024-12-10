@@ -1,11 +1,10 @@
 package com.example.Agrios_Product.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 public class Product {
     @Id
@@ -17,6 +16,9 @@ public class Product {
     private String pDescription;
     private Integer pQuantity;
     private LocalDate pDate;
+
+    @ManyToMany(mappedBy = "products")
+    private List<Order> orders; // Orders containing this product
 
     public int getId() {
         return id;

@@ -1,6 +1,7 @@
 package com.example.Agrios_Product.Service;
 
 
+import com.example.Agrios_Product.model.Order;
 import com.example.Agrios_Product.model.User;
 import com.example.Agrios_Product.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderService orderService;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -41,6 +44,23 @@ public class UserService {
 
     public List<User> getUsersByAccountType(String accountType) {
         return userRepository.findByAccountType(accountType);
+    }
+    // Add this method to fetch orders for a customer
+    public List<Order> getOrdersByCustomerId(int customerId) {
+        User customer = userRepository.findById(customerId).orElse(null);
+        return (customer != null && "CUSTOMER".equalsIgnoreCase(customer.getAccountType()))
+                ? customer.getOrders()
+                : null;
+    }
+
+    // Add this method to fetch orders for a farmer
+    public List<Order> getOrdersByFarmerId(int farmerId) {
+        User farmer = userRepository.findById(farmerId).orElse(null);
+        if (farmer != null && "FARMER".equalsIgnoreCase(farmer.getAccountType())) {
+            // Fetch orders containing products added by this farmer (to be implemented in OrderService)
+            return orderService.getOrdersByFarmerId(farmerId);
+        }
+        return null;
     }
 
 }

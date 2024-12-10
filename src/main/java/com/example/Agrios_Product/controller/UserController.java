@@ -2,6 +2,7 @@ package com.example.Agrios_Product.controller;
 
 
 import com.example.Agrios_Product.Service.UserService;
+import com.example.Agrios_Product.model.Order;
 import com.example.Agrios_Product.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,18 @@ public class UserController {
     @GetMapping(path = "/users", params = "accountType")
     public List<User> getUsersByAccountType(@RequestParam String accountType) {
         return userService.getUsersByAccountType(accountType);
+    }
+
+    // Fetch orders for a specific customer by their ID
+    @GetMapping("/users/{customerId}/orders")
+    public List<Order> getOrdersByCustomerId(@PathVariable int customerId) {
+        return userService.getOrdersByCustomerId(customerId);
+    }
+
+    // Fetch orders for a specific farmer by their ID
+    @GetMapping("/users/{farmerId}/farmer-orders")
+    public List<Order> getOrdersByFarmerId(@PathVariable int farmerId) {
+        return userService.getOrdersByFarmerId(farmerId);
     }
 
 
